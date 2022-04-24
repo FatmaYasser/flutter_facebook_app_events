@@ -86,12 +86,12 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
     }
 
     private func handleClearUserID(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        AppEvents.shared.userID = nil
+        AppEvents.userID = nil
         result(nil)
     }
 
     private func handleFlush(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        AppEvents.shared.flush()
+        AppEvents.flush()
         result(nil)
     }
 
@@ -100,7 +100,7 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
     }
 
     private func handleHandleGetAnonymousId(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        result(AppEvents.shared.anonymousID)
+        result(AppEvents.anonymousID)
     }
 
     private func handleLogEvent(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -109,9 +109,9 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
         let parameters = arguments["parameters"] as? [AppEvents.ParameterName: Any] ?? [AppEvents.ParameterName: Any]()
         if arguments["_valueToSum"] != nil && !(arguments["_valueToSum"] is NSNull) {
             let valueToDouble = arguments["_valueToSum"] as! Double
-            AppEvents.shared.logEvent(AppEvents.Name(eventName), valueToSum: valueToDouble, parameters: parameters)
+            AppEvents.logEvent(AppEvents.Name(eventName), valueToSum: valueToDouble, parameters: parameters)
         } else {
-            AppEvents.shared.logEvent(AppEvents.Name(eventName), parameters: parameters)
+            AppEvents.logEvent(AppEvents.Name(eventName), parameters: parameters)
         }
 
         result(nil)
@@ -122,9 +122,9 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
         let payload = arguments["payload"] as? [String: Any]
         if let action = arguments["action"] {
             let actionString = action as! String
-            AppEvents.shared.logPushNotificationOpen(payload: payload!, action: actionString)
+            AppEvents.logPushNotificationOpen(payload!, action: actionString)
         } else {
-            AppEvents.shared.logPushNotificationOpen(payload: payload!)
+            AppEvents.logPushNotificationOpen(payload!)
         }
 
         result(nil)
@@ -132,7 +132,7 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
 
     private func handleSetUserId(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let id = call.arguments as! String
-        AppEvents.shared.userID = id
+        AppEvents.userID = id
         result(nil)
     }
 
@@ -157,8 +157,8 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
         let arguments = call.arguments as? [String: Any] ?? [String: Any]()
         let amount = arguments["amount"] as! Double
         let currency = arguments["currency"] as! String
-        let parameters = arguments["parameters"] as? [AppEvents.ParameterName: Any] ?? [AppEvents.ParameterName: Any]()
-        AppEvents.shared.logPurchase(amount: amount, currency: currency, parameters: parameters)
+        let parameters = arguments["parameters"] as? [String: Any] ?? [String: Any]()
+        AppEvents.logPurchase(amount, currency: currency, parameters: parameters)
 
         result(nil)
     }
